@@ -11,7 +11,7 @@
 - 体验增强：支持主题切换、页面阅读进度条。
 - 浏览增强：支持关键词搜索、分类筛选、标签筛选。
 - 详情页导航：自动生成上一篇/下一篇链接。
-- 邮件订阅：已接入 Formspree 提交逻辑。
+- 邮件订阅：当前为静态演示提交流程。
 
 ## 文件结构
 
@@ -23,12 +23,6 @@
 
 1. 打开 `index.html` 查看首页。
 2. 点击文章卡片的“阅读全文”进入 `article.html?slug=...`。
-
-## Formspree 配置
-
-1. 在 Formspree 创建表单，获取你的 endpoint。
-2. 打开 `index.html`，把 `https://formspree.io/f/your_form_id` 替换为真实地址。
-3. 本地测试提交后，再推送到 GitHub Pages。
 
 ## 发布方式
 

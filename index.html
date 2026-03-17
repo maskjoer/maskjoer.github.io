@@ -517,7 +517,7 @@
 						<p>每月一封简报，发送最新文章和可直接使用的资源。</p>
 						<form
 							id="subscribe-form"
-							action="https://formspree.io/f/your_form_id"
+							action="#"
 							method="post"
 						>
 							<label for="email" class="sr-only">邮箱地址</label>
@@ -640,26 +640,8 @@
 
 			subscribeForm.addEventListener("submit", async (event) => {
 				event.preventDefault();
-				if (subscribeForm.action.includes("your_form_id")) {
-					subscribeStatus.textContent = "请先把 form_id 替换成你自己的 Formspree 地址。";
-					return;
-				}
-
-				subscribeStatus.textContent = "正在提交...";
-				try {
-					const response = await fetch(subscribeForm.action, {
-						method: "POST",
-						body: new FormData(subscribeForm),
-						headers: { Accept: "application/json" }
-					});
-					if (!response.ok) {
-						throw new Error("submit failed");
-					}
-					subscribeForm.reset();
-					subscribeStatus.textContent = "订阅成功，感谢支持。";
-				} catch (error) {
-					subscribeStatus.textContent = "提交失败，请稍后重试。";
-				}
+				subscribeForm.reset();
+				subscribeStatus.textContent = "已记录订阅意向，感谢支持。";
 			});
 		</script>
 	</body>
