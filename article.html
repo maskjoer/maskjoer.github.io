@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>文章详情 | MaskJoer Blog</title>
+    <script src="posts.js" defer></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=ZCOOL+XiaoWei&family=Outfit:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #f6efe5;
+        --bg-soft: #fff8f0;
+        --surface: rgba(255, 255, 255, 0.76);
+        --text: #1f1b16;
+        --text-soft: #5b524a;
+        --accent: #0f766e;
+        --line: #d8cfc4;
+        --card-shadow: 0 14px 42px rgba(43, 33, 23, 0.12);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: "Outfit", "Segoe UI", sans-serif;
+        color: var(--text);
+        background:
+          radial-gradient(circle at 12% 18%, #f8dac5 0%, transparent 46%),
+          radial-gradient(circle at 88% 5%, #d5f0ee 0%, transparent 42%),
+          linear-gradient(160deg, var(--bg), var(--bg-soft));
+      }
+
+      .wrap {
+        width: min(860px, 92vw);
+        margin: 28px auto;
+      }
+
+      .panel {
+        background: var(--surface);
+        border: 1px solid rgba(255, 255, 255, 0.9);
+        border-radius: 24px;
+        backdrop-filter: blur(6px);
+        box-shadow: var(--card-shadow);
+        padding: 24px;
+      }
+
+      .back {
+        text-decoration: none;
+        color: var(--accent);
+        font-weight: 600;
+      }
+
+      h1 {
+        margin: 14px 0 10px;
+        font-family: "ZCOOL XiaoWei", serif;
+        font-size: clamp(30px, 5vw, 44px);
+        line-height: 1.22;
+      }
+
+      .meta {
+        color: var(--text-soft);
+        margin-bottom: 18px;
+      }
+
+      .content p {
+        margin: 0 0 14px;
+        color: #2d261f;
+      }
+
+      .tags {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-bottom: 16px;
+      }
+
+      .tags span {
+        font-size: 12px;
+        padding: 4px 8px;
+        border-radius: 999px;
+        background: rgba(15, 118, 110, 0.12);
+        color: var(--accent);
+      }
+
+      .article-nav {
+        margin-top: 18px;
+        padding-top: 14px;
+        border-top: 1px solid var(--line);
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      .article-nav a {
+        text-decoration: none;
+        color: var(--accent);
+        font-weight: 600;
+      }
+
+      .not-found {
+        color: #7b241c;
+        font-weight: 600;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="wrap">
+      <article class="panel" id="article-view">
+        <a class="back" href="index.html">返回首页</a>
+        <h1 id="title">加载中...</h1>
+        <div class="meta" id="meta"></div>
+        <div class="tags" id="tags"></div>
+        <div class="content" id="content"></div>
+        <nav class="article-nav" id="article-nav">
+          <a id="prev-article" href="#"></a>
+          <a id="next-article" href="#"></a>
+        </nav>
+      </article>
+    </main>
+
+    <script>
+      const titleEl = document.getElementById("title");
+      const metaEl = document.getElementById("meta");
+      const tagsEl = document.getElementById("tags");
+      const contentEl = document.getElementById("content");
+      const prevArticleEl = document.getElementById("prev-article");
+      const nextArticleEl = document.getElementById("next-article");
+
+      const params = new URLSearchParams(window.location.search);
+      const slug = params.get("slug");
+
+      if (!slug || !window.POSTS) {
+        titleEl.textContent = "文章不存在";
+        metaEl.textContent = "请从首页重新进入。";
+        contentEl.innerHTML = '<p class="not-found">当前链接无效或文章数据未加载。</p>';
+        prevArticleEl.style.display = "none";
+        nextArticleEl.style.display = "none";
+      } else {
+        const index = window.POSTS.findIndex((item) => item.slug === slug);
+        const article = window.POSTS[index];
+        if (!article || index < 0) {
+          titleEl.textContent = "文章不存在";
+          metaEl.textContent = "请从首页重新进入。";
+          contentEl.innerHTML = '<p class="not-found">没有找到对应文章。</p>';
+          prevArticleEl.style.display = "none";
+          nextArticleEl.style.display = "none";
+        } else {
+          document.title = `${article.title} | MaskJoer Blog`;
+          titleEl.textContent = article.title;
+          metaEl.textContent = `${article.date} · ${article.category} · ${article.readingTime}`;
+          tagsEl.innerHTML = article.tags.map((tag) => `<span>#${tag}</span>`).join("");
+          contentEl.innerHTML = article.content.map((text) => `<p>${text}</p>`).join("");
+
+          const prevArticle = window.POSTS[index - 1];
+          const nextArticle = window.POSTS[index + 1];
+
+          if (prevArticle) {
+            prevArticleEl.href = `article.html?slug=${prevArticle.slug}`;
+            prevArticleEl.textContent = `上一篇: ${prevArticle.title}`;
+          } else {
+            prevArticleEl.style.display = "none";
+          }
+
+          if (nextArticle) {
+            nextArticleEl.href = `article.html?slug=${nextArticle.slug}`;
+            nextArticleEl.textContent = `下一篇: ${nextArticle.title}`;
+          } else {
+            nextArticleEl.style.display = "none";
+          }
+        }
+      }
+    </script>
+  </body>
+</html>

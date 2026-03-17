@@ -1,1 +1,666 @@
-<!doctype html> <html lang="zh-CN"> <head> <meta charset="UTF-8" /> <meta name="viewport" content="width=device-width, initial-scale=1.0" /> <title>我的博客</title> <style> body { font-family: "Microsoft YaHei", sans-serif; max-width: 760px; margin: 60px auto; padding: 0 16px; line-height: 1.8; } h1 { margin-bottom: 8px; } .muted { color: #666; } </style> </head> <body> <h1>你好，GitHub Pages！</h1> <p class="muted">这是我的第一个博客页面。</p> <hr /> <h2>第一篇文章</h2> <p>今天我成功搭建了自己的博客 🎉</p> </body> </html>
+<!doctype html>
+<html lang="zh-CN">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>MaskJoer Blog | 记录灵感与构建</title>
+		<meta
+			name="description"
+			content="MaskJoer 的个人博客，分享C#、C++、工具流和创作思考。"
+		/>
+		<script src="posts.js" defer></script>
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=ZCOOL+XiaoWei&family=Outfit:wght@300;400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<style>
+			:root {
+				--bg: #f6efe5;
+				--bg-soft: #fff8f0;
+				--surface: rgba(255, 255, 255, 0.74);
+				--text: #1f1b16;
+				--text-soft: #5b524a;
+				--accent: #0f766e;
+				--line: #d8cfc4;
+				--card-shadow: 0 14px 42px rgba(43, 33, 23, 0.12);
+			}
+
+			body[data-theme="night"] {
+				--bg: #11222a;
+				--bg-soft: #1b2d35;
+				--surface: rgba(16, 30, 37, 0.78);
+				--text: #ecf4f2;
+				--text-soft: #b8c7c4;
+				--accent: #ec8c2d;
+				--line: #32515c;
+				--card-shadow: 0 14px 42px rgba(0, 0, 0, 0.34);
+			}
+
+			* {
+				box-sizing: border-box;
+			}
+
+			html,
+			body {
+				margin: 0;
+				padding: 0;
+			}
+
+			body {
+				min-height: 100vh;
+				font-family: "Outfit", "Segoe UI", sans-serif;
+				color: var(--text);
+				background:
+					radial-gradient(circle at 12% 18%, #f8dac5 0%, transparent 46%),
+					radial-gradient(circle at 88% 5%, #d5f0ee 0%, transparent 42%),
+					linear-gradient(160deg, var(--bg), var(--bg-soft));
+				line-height: 1.7;
+			}
+
+			.progress {
+				position: fixed;
+				left: 0;
+				top: 0;
+				height: 4px;
+				width: 0;
+				background: linear-gradient(90deg, #f39f39, var(--accent));
+				z-index: 9;
+				transition: width 0.12s linear;
+			}
+
+			.texture {
+				position: fixed;
+				inset: 0;
+				pointer-events: none;
+				opacity: 0.26;
+				background-image:
+					linear-gradient(to right, rgba(125, 88, 55, 0.07) 1px, transparent 1px),
+					linear-gradient(to bottom, rgba(125, 88, 55, 0.07) 1px, transparent 1px);
+				background-size: 24px 24px;
+			}
+
+			.shell {
+				width: min(1080px, 94vw);
+				margin: 30px auto 52px;
+				position: relative;
+				z-index: 1;
+			}
+
+			.panel {
+				background: var(--surface);
+				border: 1px solid rgba(255, 255, 255, 0.9);
+				border-radius: 26px;
+				backdrop-filter: blur(6px);
+				box-shadow: var(--card-shadow);
+			}
+
+			.topbar {
+				padding: 16px 24px;
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				gap: 14px;
+			}
+
+			.brand {
+				font-family: "ZCOOL XiaoWei", serif;
+				font-size: 28px;
+				letter-spacing: 0.04em;
+			}
+
+			.nav {
+				display: flex;
+				gap: 16px;
+				flex-wrap: wrap;
+				align-items: center;
+			}
+
+			.nav a {
+				text-decoration: none;
+				color: var(--text-soft);
+				font-weight: 500;
+			}
+
+			.nav a:hover {
+				color: var(--accent);
+			}
+
+			.theme-toggle {
+				border: 1px solid var(--line);
+				background: rgba(255, 255, 255, 0.3);
+				color: var(--text);
+				border-radius: 999px;
+				padding: 6px 12px;
+				font: inherit;
+				cursor: pointer;
+			}
+
+			.hero {
+				margin-top: 18px;
+				padding: 34px 28px;
+				display: grid;
+				grid-template-columns: 1.15fr 0.85fr;
+				gap: 20px;
+			}
+
+			.hero h1 {
+				margin: 0;
+				font-family: "ZCOOL XiaoWei", serif;
+				font-size: clamp(34px, 5vw, 52px);
+				line-height: 1.18;
+			}
+
+			.hero p {
+				margin: 16px 0 0;
+				color: var(--text-soft);
+				max-width: 52ch;
+			}
+
+			.hero-actions {
+				margin-top: 22px;
+				display: flex;
+				gap: 12px;
+				flex-wrap: wrap;
+			}
+
+			.btn {
+				border: 1px solid var(--line);
+				border-radius: 999px;
+				padding: 10px 16px;
+				text-decoration: none;
+				color: var(--text);
+				transition: transform 0.2s ease, box-shadow 0.2s ease;
+			}
+
+			.btn:hover {
+				transform: translateY(-2px);
+				box-shadow: 0 6px 16px rgba(23, 13, 5, 0.12);
+			}
+
+			.btn.primary {
+				background: var(--accent);
+				border-color: var(--accent);
+				color: #fff;
+			}
+
+			.stats {
+				align-self: center;
+				border: 1px dashed var(--line);
+				border-radius: 20px;
+				padding: 16px;
+				background: rgba(255, 255, 255, 0.72);
+			}
+
+			.stats h2 {
+				margin: 0;
+				font-size: 15px;
+				color: var(--text-soft);
+			}
+
+			.stats-grid {
+				margin-top: 14px;
+				display: grid;
+				grid-template-columns: repeat(3, 1fr);
+				gap: 8px;
+			}
+
+			.stats-grid strong {
+				display: block;
+				font-size: 22px;
+			}
+
+			.section {
+				margin-top: 22px;
+				padding: 24px;
+			}
+
+			.section h2 {
+				margin: 0 0 12px;
+				font-family: "ZCOOL XiaoWei", serif;
+				font-size: 30px;
+			}
+
+			.posts {
+				display: grid;
+				grid-template-columns: repeat(3, 1fr);
+				gap: 14px;
+			}
+
+			.post-tools {
+				display: grid;
+				grid-template-columns: 1fr auto;
+				gap: 10px;
+				margin-bottom: 14px;
+			}
+
+			.post-tools input,
+			.post-tools select {
+				border: 1px solid var(--line);
+				border-radius: 10px;
+				padding: 10px 12px;
+				font: inherit;
+				background: rgba(255, 255, 255, 0.75);
+				color: var(--text);
+			}
+
+			.tag-filter {
+				display: flex;
+				gap: 8px;
+				flex-wrap: wrap;
+				margin-bottom: 14px;
+			}
+
+			.tag-chip {
+				border: 1px solid var(--line);
+				background: rgba(255, 255, 255, 0.7);
+				color: var(--text-soft);
+				border-radius: 999px;
+				padding: 6px 10px;
+				font: inherit;
+				font-size: 13px;
+				cursor: pointer;
+			}
+
+			.tag-chip.active {
+				color: #fff;
+				background: var(--accent);
+				border-color: var(--accent);
+			}
+
+			.post {
+				border: 1px solid var(--line);
+				border-radius: 16px;
+				padding: 16px;
+				background: rgba(255, 255, 255, 0.75);
+			}
+
+			.post .meta {
+				font-size: 13px;
+				color: var(--text-soft);
+			}
+
+			.post h3 {
+				margin: 10px 0 8px;
+				font-size: 19px;
+			}
+
+			.post p {
+				margin: 0;
+				color: var(--text-soft);
+			}
+
+			.post-tags {
+				display: flex;
+				gap: 6px;
+				flex-wrap: wrap;
+				margin-top: 10px;
+			}
+
+			.post-tags span {
+				font-size: 12px;
+				padding: 4px 8px;
+				border-radius: 999px;
+				background: rgba(15, 118, 110, 0.12);
+				color: var(--accent);
+			}
+
+			.post a {
+				display: inline-block;
+				margin-top: 12px;
+				color: var(--accent);
+				text-decoration: none;
+				font-weight: 600;
+			}
+
+			.about {
+				display: grid;
+				grid-template-columns: 1fr 1fr;
+				gap: 14px;
+			}
+
+			.about-card,
+			.subscribe {
+				border: 1px solid var(--line);
+				border-radius: 16px;
+				padding: 16px;
+				background: rgba(255, 255, 255, 0.75);
+			}
+
+			.subscribe form {
+				display: flex;
+				gap: 10px;
+				margin-top: 10px;
+				flex-wrap: wrap;
+			}
+
+			.subscribe input {
+				flex: 1;
+				min-width: 180px;
+				border: 1px solid var(--line);
+				border-radius: 10px;
+				padding: 10px 12px;
+				font: inherit;
+			}
+
+			.subscribe button {
+				border: none;
+				background: var(--accent);
+				color: #fff;
+				border-radius: 10px;
+				padding: 10px 14px;
+				font: inherit;
+				cursor: pointer;
+			}
+
+			.subscribe-status {
+				margin-top: 10px;
+				font-size: 13px;
+				color: var(--text-soft);
+			}
+
+			.sr-only {
+				position: absolute;
+				width: 1px;
+				height: 1px;
+				padding: 0;
+				margin: -1px;
+				overflow: hidden;
+				clip: rect(0, 0, 0, 0);
+				white-space: nowrap;
+				border: 0;
+			}
+
+			footer {
+				margin-top: 20px;
+				text-align: center;
+				color: var(--text-soft);
+				padding: 16px;
+			}
+
+			.reveal {
+				opacity: 0;
+				transform: translateY(12px);
+				animation: rise 0.6s ease forwards;
+			}
+
+			.reveal:nth-of-type(2) {
+				animation-delay: 0.1s;
+			}
+
+			.reveal:nth-of-type(3) {
+				animation-delay: 0.2s;
+			}
+
+			@keyframes rise {
+				to {
+					opacity: 1;
+					transform: translateY(0);
+				}
+			}
+
+			@media (max-width: 920px) {
+				.hero {
+					grid-template-columns: 1fr;
+				}
+
+				.posts {
+					grid-template-columns: 1fr 1fr;
+				}
+			}
+
+			@media (max-width: 640px) {
+				.shell {
+					margin: 18px auto 24px;
+				}
+
+				.topbar,
+				.hero,
+				.section {
+					padding: 18px;
+				}
+
+				.posts,
+				.about {
+					grid-template-columns: 1fr;
+				}
+
+				.brand {
+					font-size: 24px;
+				}
+
+				.hero h1 {
+					font-size: 34px;
+				}
+
+				.theme-toggle {
+					padding: 5px 10px;
+				}
+
+				.post-tools {
+					grid-template-columns: 1fr;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<div class="progress" id="reading-progress" aria-hidden="true"></div>
+		<div class="texture" aria-hidden="true"></div>
+		<div class="shell">
+			<header class="panel topbar reveal">
+				<div class="brand">MaskJoer</div>
+				<nav class="nav" aria-label="站点导航">
+					<a href="#posts">文章</a>
+					<a href="#about">关于</a>
+					<a href="#subscribe">订阅</a>
+					<button class="theme-toggle" id="theme-toggle" type="button">切换主题</button>
+				</nav>
+			</header>
+
+			<main>
+				<section class="panel hero reveal">
+					<div>
+						<h1>把学习过程，做成可复用的创作系统。</h1>
+						<p>
+							这里记录我在前端开发、效率工具和个人写作上的持续实践。
+							每一篇文章都尽量包含可执行的方法，而不是只停留在经验描述。
+						</p>
+						<div class="hero-actions">
+							<a class="btn primary" href="#posts">开始阅读</a>
+							<a class="btn" href="#about">认识我</a>
+						</div>
+					</div>
+
+					<aside class="stats" aria-label="博客统计">
+						<h2>博客节奏</h2>
+						<div class="stats-grid">
+							<div>
+								<strong>18</strong>
+								篇文章
+							</div>
+							<div>
+								<strong>4</strong>
+								个专题
+							</div>
+							<div>
+								<strong>2.4k</strong>
+								月访问
+							</div>
+						</div>
+					</aside>
+				</section>
+
+				<section class="panel section reveal" id="posts">
+					<h2>精选文章</h2>
+					<div class="post-tools" aria-label="文章筛选">
+						<input id="post-search" type="search" placeholder="搜索文章标题或摘要" />
+						<select id="post-category" aria-label="按分类筛选">
+							<option value="all">全部分类</option>
+						</select>
+					</div>
+					<div class="tag-filter" id="tag-filter"></div>
+					<div class="posts" id="post-list"></div>
+				</section>
+
+				<section class="panel section about reveal" id="about">
+					<article class="about-card">
+						<h2>关于我</h2>
+						<p>
+							我是 MaskJoer，持续练习把复杂知识写清楚。
+							博客主要分享真实项目里的方法沉淀，以及构建个人品牌的过程。
+						</p>
+					</article>
+
+					<article class="subscribe" id="subscribe">
+						<h2>保持更新</h2>
+						<p>每月一封简报，发送最新文章和可直接使用的资源。</p>
+						<form
+							id="subscribe-form"
+							action="https://formspree.io/f/your_form_id"
+							method="post"
+						>
+							<label for="email" class="sr-only">邮箱地址</label>
+							<input id="email" name="email" type="email" placeholder="输入你的邮箱" required />
+							<button type="submit">订阅</button>
+						</form>
+						<div class="subscribe-status" id="subscribe-status">填写邮箱后即可提交订阅。</div>
+					</article>
+				</section>
+			</main>
+
+			<footer>
+				© 2026 MaskJoer Blog · Built with GitHub Pages
+			</footer>
+		</div>
+
+		<script>
+			const postList = document.getElementById("post-list");
+			const progressBar = document.getElementById("reading-progress");
+			const themeToggle = document.getElementById("theme-toggle");
+			const searchInput = document.getElementById("post-search");
+			const categorySelect = document.getElementById("post-category");
+			const tagFilter = document.getElementById("tag-filter");
+			const subscribeForm = document.getElementById("subscribe-form");
+			const subscribeStatus = document.getElementById("subscribe-status");
+			const savedTheme = localStorage.getItem("blog-theme");
+			let activeTag = "all";
+
+			if (savedTheme) {
+				document.body.setAttribute("data-theme", savedTheme);
+			}
+
+			themeToggle.addEventListener("click", () => {
+				const current = document.body.getAttribute("data-theme") === "night" ? "day" : "night";
+				document.body.setAttribute("data-theme", current);
+				localStorage.setItem("blog-theme", current);
+			});
+
+			function renderPosts() {
+				if (!window.POSTS || !postList) {
+					return;
+				}
+
+				const keyword = searchInput.value.trim().toLowerCase();
+				const category = categorySelect.value;
+
+				const filteredPosts = window.POSTS.filter((post) => {
+					const matchesKeyword =
+						post.title.toLowerCase().includes(keyword) || post.summary.toLowerCase().includes(keyword);
+					const matchesCategory = category === "all" || post.category === category;
+					const matchesTag = activeTag === "all" || post.tags.includes(activeTag);
+					return matchesKeyword && matchesCategory && matchesTag;
+				});
+
+				if (filteredPosts.length === 0) {
+					postList.innerHTML = '<article class="post"><h3>暂无结果</h3><p>试试更换关键词、分类或标签。</p></article>';
+					return;
+				}
+
+				postList.innerHTML = filteredPosts.map((post) => {
+					const tags = post.tags.map((tag) => `<span>#${tag}</span>`).join("");
+					return `
+						<article class="post">
+							<div class="meta">${post.date} · ${post.category} · ${post.readingTime}</div>
+							<h3>${post.title}</h3>
+							<p>${post.summary}</p>
+							<div class="post-tags">${tags}</div>
+							<a href="article.html?slug=${post.slug}">阅读全文</a>
+						</article>
+					`;
+				}).join("");
+			}
+
+			function renderFilters() {
+				if (!window.POSTS) {
+					return;
+				}
+
+				const categories = ["all", ...new Set(window.POSTS.map((post) => post.category))];
+				categorySelect.innerHTML = categories
+					.map((cat) => `<option value="${cat}">${cat === "all" ? "全部分类" : cat}</option>`)
+					.join("");
+
+				const tags = ["all", ...new Set(window.POSTS.flatMap((post) => post.tags))];
+				tagFilter.innerHTML = tags
+					.map(
+						(tag) =>
+							`<button class="tag-chip${tag === activeTag ? " active" : ""}" type="button" data-tag="${tag}">${tag === "all" ? "全部标签" : "#" + tag}</button>`
+					)
+					.join("");
+			}
+
+			function updateProgress() {
+				const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+				if (scrollable <= 0) {
+					progressBar.style.width = "0";
+					return;
+				}
+				const percent = (window.scrollY / scrollable) * 100;
+				progressBar.style.width = `${Math.min(100, Math.max(0, percent))}%`;
+			}
+
+			renderPosts();
+			renderFilters();
+			renderPosts();
+			updateProgress();
+			window.addEventListener("scroll", updateProgress, { passive: true });
+
+			searchInput.addEventListener("input", renderPosts);
+			categorySelect.addEventListener("change", renderPosts);
+			tagFilter.addEventListener("click", (event) => {
+				const button = event.target.closest("button[data-tag]");
+				if (!button) {
+					return;
+				}
+				activeTag = button.dataset.tag;
+				renderFilters();
+				renderPosts();
+			});
+
+			subscribeForm.addEventListener("submit", async (event) => {
+				event.preventDefault();
+				if (subscribeForm.action.includes("your_form_id")) {
+					subscribeStatus.textContent = "请先把 form_id 替换成你自己的 Formspree 地址。";
+					return;
+				}
+
+				subscribeStatus.textContent = "正在提交...";
+				try {
+					const response = await fetch(subscribeForm.action, {
+						method: "POST",
+						body: new FormData(subscribeForm),
+						headers: { Accept: "application/json" }
+					});
+					if (!response.ok) {
+						throw new Error("submit failed");
+					}
+					subscribeForm.reset();
+					subscribeStatus.textContent = "订阅成功，感谢支持。";
+				} catch (error) {
+					subscribeStatus.textContent = "提交失败，请稍后重试。";
+				}
+			});
+		</script>
+	</body>
+</html>
