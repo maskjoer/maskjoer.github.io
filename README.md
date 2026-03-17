@@ -19,6 +19,7 @@
 - `article.html`：文章详情页模板，通过 URL 参数 `slug` 加载内容。
 - `posts.js`：文章数据源，新增文章只需在此追加对象（含 `tags` 字段）。
 - `POST_TEMPLATE.md`：新文章录入模板，可直接复制后填写。
+- `template.html`：可视化模板页，浏览器直接查看更直观。
 
 ## 本地预览
 
